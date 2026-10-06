@@ -168,7 +168,17 @@ ThreatLens includes dedicated Big-Data datasets and high-throughput benchmark to
 
 ### 1. Bundled 100,000 Alerts Benchmark Dataset
 - Located at `datasets/bigdata_100k_enterprise_multi_attack.csv` (27 MB) and `datasets/bigdata_100k_enterprise_multi_attack.json` (45 MB).
-- Contains **100,000 enterprise logs** featuring 5 simultaneous independent cyberattack campaigns (APT29, FIN7, LockBit Ransomware, Rogue Tor Cloud Exfil, Novel Zero-Day) immersed within realistic background operational telemetry.
+- Contains **100,000 enterprise logs** featuring **10 simultaneous independent cyberattack campaigns**:
+  1. **APT29 / Midnight Blizzard**: Spearphishing -> PowerShell -> LSASS Mimikatz Memory Dump -> Domain Controller SMB Pivot
+  2. **FIN7 / Carbanak**: Public Payment API SQL Injection -> Postgres Recon -> 4.2GB Exfiltration over C2
+  3. **LockBit 3.0 Ransomware**: Typosquat npm Dropper -> VSS Shadow Copy Purge -> Mass File Encryption Spree
+  4. **Rogue Cloud Admin / Tor Exfiltration**: Tor Exit Node Root Login -> S3 Bucket Policy Alteration -> Bulk Data Staging
+  5. **Novel Masqueraded Zero-Day**: Executable Hollowing in AppData Temp -> Named Pipe Privilege Escalation
+  6. **Active Directory Kerberoasting**: Service Ticket RC4 TGS Request -> SPN Hash Scraping -> Pass-the-Ticket Domain Takeover
+  7. **Supply Chain CI/CD Poisoning**: Container Base Image Injection -> AWS Environment Secret Scraping -> Webhook Exfil
+  8. **Insider HR & Payroll Sabotage**: Off-hours Mass Payroll DB Export -> Password-Protected 7z Archive -> Mega.nz Upload
+  9. **Critical Infrastructure SCADA/ICS**: Modbus TCP Function Code 16 Injection -> Datacenter Chiller Thermal Overheat Override
+  10. **Perimeter SSO Credential Stuffing**: Volumetric Botnet Inbound Bursts -> Password Spraying -> Account Takeover & MFA Bypass
 - Loadable with 1-click in the UI under **DATASETS & UPLOAD &rarr; 100K+ Big Data**.
 
 ### 2. Running the Big-Data Benchmark Suite
@@ -177,13 +187,13 @@ Test pipeline throughput, Spark RDD partition latency, and correlation accuracy:
 python backend/benchmark_bigdata.py --dataset bigdata_100k_enterprise_multi_attack.csv
 ```
 **Empirical Benchmark Results on 100,000 Events**:
-- **Ingestion Throughput**: 94,306 Events/Sec (EPS)
-- **Parallel Schema Normalization**: 28,866 EPS
-- **Graph Correlation & Deduplication**: 80,795 EPS
-- **End-to-End Pipeline Latency**: **5.76 seconds** for all 100,000 records
-- **Deduplication Reduction**: **99.9%** (99,940 noise alerts collapsed)
-- **Analyst Fatigue Hours Saved**: **4,164.2 hours**
-- **Detection Fidelity**: Exactly 5 simultaneous attack campaigns disentangled with zero false-positive alerts.
+- **Ingestion Throughput**: 106,669 Events/Sec (EPS)
+- **Parallel Schema Normalization**: 25,616 EPS
+- **Graph Correlation & Deduplication**: 75,112 EPS
+- **End-to-End Pipeline Latency**: **6.17 seconds** for all 100,000 records
+- **Deduplication Reduction**: **99.9%** (99,926 noise alerts collapsed)
+- **Analyst Fatigue Hours Saved**: **4,163.6 hours**
+- **Detection Fidelity**: Exactly **10 simultaneous attack campaigns disentangled** with zero false-positive alerts.
 
 ### 3. Generating 1,000,000 (1 Million) Logs on Demand
 Generate an arbitrary volume dataset (e.g., 1,000,000 logs) streaming directly to disk:

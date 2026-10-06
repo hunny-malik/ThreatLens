@@ -22,8 +22,11 @@ ENTERPRISE_ASSETS = {
     "10.0.4.102": {"name": "STAGING-BENCH-02", "type": AssetType.TEST_MACHINE, "criticality": AssetCriticality.LOW, "owner": "dev-ops"},
     "10.0.5.88": {"name": "EXEC-LAPTOP-CEO", "type": AssetType.EMPLOYEE_ENDPOINT, "criticality": AssetCriticality.HIGH, "owner": "leadership"},
     "10.0.5.92": {"name": "FIN-WORKSTATION-04", "type": AssetType.EMPLOYEE_ENDPOINT, "criticality": AssetCriticality.MEDIUM, "owner": "finance"},
+    "10.0.5.95": {"name": "DEV-WORKSTATION-04", "type": AssetType.DEVELOPER_MACHINE, "criticality": AssetCriticality.MEDIUM, "owner": "engineering"},
+    "10.0.5.42": {"name": "FIN-BILLING-03", "type": AssetType.EMPLOYEE_ENDPOINT, "criticality": AssetCriticality.HIGH, "owner": "finance"},
     "10.0.5.110": {"name": "DEV-WORKSTATION-12", "type": AssetType.DEVELOPER_MACHINE, "criticality": AssetCriticality.MEDIUM, "owner": "eng-frontend"},
-    "10.0.5.115": {"name": "HR-TERMINAL-01", "type": AssetType.EMPLOYEE_ENDPOINT, "criticality": AssetCriticality.MEDIUM, "owner": "people-ops"}
+    "10.0.5.115": {"name": "HR-TERMINAL-01", "type": AssetType.EMPLOYEE_ENDPOINT, "criticality": AssetCriticality.MEDIUM, "owner": "people-ops"},
+    "10.0.8.12": {"name": "DC-HVAC-PLC-01", "type": AssetType.PRODUCTION_SERVER, "criticality": AssetCriticality.CRITICAL, "owner": "facilities-ot"}
 }
 
 DEFAULT_ASSET = {

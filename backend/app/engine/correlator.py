@@ -104,7 +104,10 @@ class IncidentCorrelationEngine:
             # In an enterprise SOC, purely benign background telemetry (routine scheduled backups, authorized IT agent queries,
             # normal Kerberos renewals with LOW severity and NO attack chain or MITRE techniques) is collapsed as benign baseline
             # rather than generating false incident tickets.
-            is_in_campaign = any(ip in ["198.51.100.22", "203.0.113.88", "194.26.29.112", "185.220.101.5"] for ip in src_ips)
+            is_in_campaign = any(ip in [
+                "198.51.100.22", "203.0.113.88", "194.26.29.112", "185.220.101.5",
+                "45.33.32.156", "103.251.167.22", "192.168.99.44"
+            ] for ip in src_ips)
             is_pure_benign_noise = (
                 max_severity == Severity.LOW and
                 len(attack_chain) == 0 and

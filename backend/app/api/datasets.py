@@ -180,25 +180,25 @@ AVAILABLE_DATASETS = [
   },
   {
     "id": "dataset_bigdata_100k_csv",
-    "name": "Big Data Benchmark: 100,000 Enterprise Logs (5 Attacks, CSV)",
+    "name": "Big Data Benchmark: 100,000 Enterprise Logs (10 Attacks, CSV)",
     "filename": "bigdata_100k_enterprise_multi_attack.csv",
     "format": "CSV",
     "threat_category": "Big Data Scale Stress-Test (100,000 Events, 32 Spark Partitions)",
-    "attack_count": 5,
+    "attack_count": 10,
     "risk_level": "CRITICAL",
-    "description": "Massive 100,000 telemetry events benchmark testing high-volume distributed ingestion, 32-partition Spark RDD map-reduce, and graph disentanglement across 5 simultaneous cyberattacks. 99.9% deduplication collapsing.",
+    "description": "Massive 100,000 telemetry events benchmark testing high-volume distributed ingestion, 32-partition Spark RDD map-reduce, and graph disentanglement across 10 simultaneous cyberattacks (APT29, FIN7, LockBit, Tor Exfil, Zero-Day, AD Kerberoasting, CI/CD Poisoning, Insider HR Staging, SCADA Modbus, and SSO Credential Stuffing). 99.9% deduplication collapsing.",
     "telemetry_sources": ["EDR", "Firewall", "Windows Event Logs", "Linux Logs", "Auth", "Network Monitoring", "Cloud"],
     "records_count": 100000
   },
   {
     "id": "dataset_bigdata_100k_json",
-    "name": "Big Data Benchmark: 100,000 Enterprise Logs (5 Attacks, JSON)",
+    "name": "Big Data Benchmark: 100,000 Enterprise Logs (10 Attacks, JSON)",
     "filename": "bigdata_100k_enterprise_multi_attack.json",
     "format": "JSON",
     "threat_category": "Big Data Scale Stress-Test (100,000 Events, 32 Spark Partitions)",
-    "attack_count": 5,
+    "attack_count": 10,
     "risk_level": "CRITICAL",
-    "description": "Complete 100,000 record JSON dataset benchmarking enterprise scale event-per-second (EPS) ingestion and correlation graph performance.",
+    "description": "Complete 100,000 record JSON dataset benchmarking enterprise scale event-per-second (EPS) ingestion, 32-partition RDD mapping, and 10 simultaneous attack campaigns.",
     "telemetry_sources": ["EDR", "Firewall", "Windows Event Logs", "Linux Logs", "Auth", "Network Monitoring", "Cloud"],
     "records_count": 100000
   }
