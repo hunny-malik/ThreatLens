@@ -1,0 +1,44 @@
+[
+  {
+    "id": "alt-novel-501",
+    "timestamp": "2026-10-06T02:14:00Z",
+    "source": "EDR",
+    "alert_type": "Unsigned Binary Rare Execution Path",
+    "severity": "HIGH",
+    "source_ip": "10.0.5.92",
+    "destination_ip": "198.51.100.199",
+    "source_user": "finance_lead_carter",
+    "host": "FIN-WORKSTATION-04",
+    "process": "C:\\Users\\carter\\AppData\\Local\\Temp\\updater_x64.tmp",
+    "file_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "detection_rule": "Behavioral Anomaly: Off-hours Rare Binary",
+    "raw_message": "Process updater_x64.tmp executed outside business hours (02:14 AM) with raw socket handle to foreign unclassified IP",
+    "is_anomalous": true,
+    "anomaly_reasons": [
+      "Off-hours execution (02:14 AM) divergent from 30-day user baseline",
+      "Execution from non-standard temporary directory (AppData\\Local\\Temp)",
+      "Process has no cryptographic signature and no historical enterprise prevalence"
+    ],
+    "confidence": 0.88
+  },
+  {
+    "id": "alt-novel-502",
+    "timestamp": "2026-10-06T02:18:22Z",
+    "source": "Network Monitoring",
+    "alert_type": "DGA Beaconing Anomaly",
+    "severity": "HIGH",
+    "source_ip": "10.0.5.92",
+    "destination_ip": "198.51.100.199",
+    "source_user": "finance_lead_carter",
+    "host": "FIN-WORKSTATION-04",
+    "domain": "x89a-corp-sync.cc",
+    "detection_rule": "Algorithmically Generated Domain Query Pattern",
+    "raw_message": "High entropy DNS queries matching Domain Generation Algorithm pattern detected from host FIN-WORKSTATION-04",
+    "is_anomalous": true,
+    "anomaly_reasons": [
+      "High entropy domain query without legitimate WHOIS registration record",
+      "Periodic beaconing jitter interval (30s +/- 2s)"
+    ],
+    "confidence": 0.91
+  }
+]

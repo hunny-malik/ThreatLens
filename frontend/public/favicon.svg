@@ -1,0 +1,11 @@
+<svg width="32" height="32" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <polygon points="14,2 24,7.5 24,20.5 14,26 4,20.5 4,7.5" stroke="#38BDF8" stroke-width="2" stroke-linejoin="round"/>
+  <circle cx="14" cy="14" r="3.5" fill="#38BDF8"/>
+  <line x1="14" y1="5.5" x2="14" y2="8.5" stroke="#38BDF8" stroke-width="1.5"/>
+  <line x1="14" y1="19.5" x2="14" y2="22.5" stroke="#38BDF8" stroke-width="1.5"/>
+  <line x1="6" y1="14" x2="9" y2="14" stroke="#38BDF8" stroke-width="1.5"/>
+  <line x1="19" y1="14" x2="22" y2="14" stroke="#38BDF8" stroke-width="1.5"/>
+  <circle cx="9" cy="9" r="1.2" fill="#F43F5E"/>
+  <circle cx="19" cy="9" r="1.2" fill="#F59E0B"/>
+  <circle cx="14" cy="21" r="1.2" fill="#10B981"/>
+</svg>
