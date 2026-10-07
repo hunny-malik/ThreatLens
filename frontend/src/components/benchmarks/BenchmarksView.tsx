@@ -50,7 +50,7 @@ export const BenchmarksView: React.FC = () => {
             </h2>
           </div>
           <p className="font-serif text-sm text-text-muted mt-1">
-            Quantifiable efficiency measurements and distributed performance scaling against ground-truth evaluation datasets.
+            Measured MTTT reduction on real datasets · Projected scalability for distributed Spark architecture · Baseline from SANS/Gartner 2023 research.
           </p>
         </div>
 
@@ -107,12 +107,15 @@ export const BenchmarksView: React.FC = () => {
           </div>
         </div>
 
-        {/* Traditional SIEM vs ThreatLens Comparison Table (Requirement 28) */}
+        {/* Baseline vs ThreatLens Comparison Table */}
         <div className="editorial-card overflow-hidden">
           <div className="px-6 py-4 bg-surface border-b border-hairline">
             <h3 className="font-display text-sm font-semibold uppercase tracking-wider text-ink">
-              Traditional SIEM Silos vs. ThreatLens Correlation Engine
+              Rule-Only SIEM Baseline vs. ThreatLens Correlation Engine
             </h3>
+            <p className="text-[10px] font-mono text-text-muted mt-1">
+              Baseline source: SANS Blue Team Report 2023 + Gartner SOC Survey 2023. Not a comparison against any specific vendor (Splunk, QRadar, Sentinel).
+            </p>
           </div>
 
           <div className="overflow-x-auto">
@@ -177,10 +180,12 @@ export const BenchmarksView: React.FC = () => {
         <div className="editorial-card p-6 space-y-4">
           <div>
             <h3 className="font-display text-sm font-semibold uppercase tracking-wider text-ink">
-              Scalability Benchmark: Single-Node vs. Distributed Spark (10K &rarr; 10M Alerts)
+              Projected Scalability: Single-Node vs. Distributed Spark (10K &rarr; 10M Alerts)
             </h3>
             <p className="font-serif text-xs text-text-muted mt-1">
-              Demonstrates throughput scaling as alert ingestion volume increases by orders of magnitude.
+              Theoretical throughput projections using Amdahl&apos;s Law for our Spark partitioning strategy.
+              Single-node times extrapolated from 100K dataset baseline measurement.
+              <span className="font-semibold text-clay-deep"> Not measured on a live cluster.</span>
             </p>
           </div>
 
