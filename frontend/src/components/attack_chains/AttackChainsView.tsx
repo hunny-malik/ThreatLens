@@ -3,6 +3,7 @@ import { GitBranch, ShieldAlert, ArrowRight, Server, Activity, ChevronRight } fr
 import { Incident } from '../../types';
 import { SeverityBadge } from '../common/SeverityBadge';
 import { RiskScoreGauge } from '../common/RiskScoreGauge';
+import { DirectoryFooter } from '../layout/DirectoryFooter';
 
 interface AttackChainsViewProps {
   incidents: Incident[];
@@ -20,124 +21,131 @@ export const AttackChainsView: React.FC<AttackChainsViewProps> = ({
   const activeIncident = incidents.find((i) => i.id === selectedIncidentId) || incidents[0];
 
   return (
-    <div className="p-6 space-y-6 max-w-7xl mx-auto">
-      <div>
-        <div className="flex items-center gap-2">
-          <GitBranch className="w-5 h-5 text-cyan-400" />
-          <h2 className="text-base font-semibold text-slate-100 uppercase tracking-wider font-mono">
-            Attack Chain Reconstruction Engine
-          </h2>
+    <div className="bg-canvas min-h-full flex flex-col justify-between">
+      <div className="p-6 md:p-8 space-y-6 max-w-7xl mx-auto w-full">
+        {/* Header */}
+        <div className="pb-4 border-b border-hairline">
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-clay" />
+            <h2 className="font-display text-xl md:text-2xl font-medium tracking-tight text-ink">
+              Attack Chain Reconstruction Engine
+            </h2>
+          </div>
+          <p className="font-serif text-sm text-text-muted mt-1">
+            Causal sequence mapping across MITRE ATT&CK kill chain based on evidence-backed telemetry.
+          </p>
         </div>
-        <p className="text-xs text-slate-400 mt-0.5">
-          Causal sequence mapping across MITRE ATT&CK kill chain based on evidence-backed telemetry.
-        </p>
-      </div>
 
-      {/* Incident Selector Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-        {incidents.map((inc) => (
-          <button
-            key={inc.id}
-            onClick={() => setSelectedIncidentId(inc.id)}
-            className={`p-3 rounded border text-left transition-colors flex flex-col justify-between ${
-              selectedIncidentId === inc.id
-                ? 'bg-slate-800/90 border-cyan-500/80 shadow-md'
-                : 'bg-slate-900/60 border-slate-800 hover:border-slate-700'
-            }`}
-          >
-            <div>
-              <div className="flex items-center justify-between mb-1">
-                <span className="font-mono text-xs font-bold text-cyan-400">{inc.id}</span>
-                <SeverityBadge severity={inc.severity} size="sm" />
-              </div>
-              <h4 className="text-xs font-medium text-slate-100 truncate">{inc.title}</h4>
-              <span className="text-[11px] text-slate-400 font-mono block mt-0.5">
-                Target: {inc.primary_asset}
-              </span>
-            </div>
-
-            <div className="mt-3 pt-2 border-t border-slate-800/80 flex items-center justify-between text-[11px] font-mono">
-              <span className="text-slate-400">{inc.attack_chain.length} Kill-Chain Stages</span>
-              <RiskScoreGauge score={inc.risk_score} size="sm" />
-            </div>
-          </button>
-        ))}
-      </div>
-
-      {/* Active Incident Attack Chain Visualizer */}
-      {activeIncident && (
-        <div className="soc-card p-6 space-y-6">
-          <div className="flex items-center justify-between border-b border-slate-800 pb-4 flex-wrap gap-3">
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="font-mono text-sm font-bold text-cyan-400">
-                  {activeIncident.id}
-                </span>
-                <SeverityBadge severity={activeIncident.severity} />
-                <span className="text-xs font-mono text-slate-300">
-                  {activeIncident.primary_asset} ({activeIncident.primary_asset_criticality})
-                </span>
-              </div>
-              <h3 className="text-base font-bold text-slate-100 mt-1">
-                {activeIncident.title}
-              </h3>
-            </div>
-
+        {/* Incident Selector Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5">
+          {incidents.map((inc) => (
             <button
-              onClick={() => onSelectIncident(activeIncident.id)}
-              className="px-3 py-1.5 bg-cyan-700 hover:bg-cyan-600 text-white rounded text-xs font-mono font-medium flex items-center gap-1.5 transition-colors"
+              key={inc.id}
+              onClick={() => setSelectedIncidentId(inc.id)}
+              className={`p-4 border text-left transition-colors flex flex-col justify-between ${
+                selectedIncidentId === inc.id
+                  ? 'bg-surface border-ink shadow-sm'
+                  : 'bg-surface/60 border-hairline hover:border-ink/40'
+              }`}
             >
-              <span>Investigate Incident</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </button>
-          </div>
-
-          {/* Interactive Kill-Chain Horizontal Flow */}
-          <div className="space-y-4">
-            <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 block">
-              Sequential Attack Execution Pipeline:
-            </span>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-              {activeIncident.attack_chain.map((step, idx) => (
-                <div
-                  key={step.stage}
-                  className="soc-card-elevated p-4 relative flex flex-col justify-between space-y-3 border-slate-700"
-                >
-                  <div className="space-y-1.5">
-                    <div className="flex items-center justify-between">
-                      <span className="w-5 h-5 rounded-full bg-cyan-950 border border-cyan-700 text-cyan-400 font-mono text-[10px] font-bold flex items-center justify-center">
-                        {idx + 1}
-                      </span>
-                      <span className="text-[10px] font-mono text-slate-400">
-                        {step.timestamp.slice(11, 19)}
-                      </span>
-                    </div>
-
-                    <h4 className="font-mono text-xs font-bold text-slate-100 uppercase">
-                      {step.stage}
-                    </h4>
-                    <div className="text-[11px] font-mono text-cyan-400 bg-slate-900 px-1.5 py-0.5 rounded border border-slate-800 inline-block">
-                      {step.technique_id} &bull; {step.technique_name}
-                    </div>
-                  </div>
-
-                  <div className="text-xs text-slate-300 font-sans border-t border-slate-800 pt-2 leading-relaxed">
-                    {step.evidence}
-                  </div>
-
-                  <div className="pt-2 border-t border-slate-800 flex items-center justify-between text-[10px] font-mono text-slate-400">
-                    <span>Source: {step.source}</span>
-                    <span className="text-slate-200 font-bold">
-                      {Math.round(step.confidence * 100)}% Conf
-                    </span>
-                  </div>
+              <div>
+                <div className="flex items-center justify-between mb-1.5">
+                  <span className="font-mono text-xs font-semibold text-ink bg-oat/40 px-2 py-0.5 border border-hairline">
+                    {inc.id}
+                  </span>
+                  <SeverityBadge severity={inc.severity} size="sm" />
                 </div>
-              ))}
+                <h4 className="font-display text-sm font-semibold text-ink truncate mt-2">{inc.title}</h4>
+                <span className="text-xs text-text-muted font-mono block mt-1">
+                  Target: {inc.primary_asset}
+                </span>
+              </div>
+
+              <div className="mt-4 pt-2.5 border-t border-hairline flex items-center justify-between text-xs font-mono">
+                <span className="text-text-muted">{inc.attack_chain.length} Stages</span>
+                <RiskScoreGauge score={inc.risk_score} size="sm" />
+              </div>
+            </button>
+          ))}
+        </div>
+
+        {/* Active Incident Attack Chain Visualizer */}
+        {activeIncident && (
+          <div className="editorial-card p-6 md:p-8 space-y-6">
+            <div className="flex items-center justify-between border-b border-hairline pb-4 flex-wrap gap-4">
+              <div>
+                <div className="flex items-center gap-2.5 flex-wrap">
+                  <span className="font-mono text-sm font-semibold text-ink bg-oat/50 px-2 py-0.5 border border-hairline">
+                    {activeIncident.id}
+                  </span>
+                  <SeverityBadge severity={activeIncident.severity} />
+                  <span className="text-xs font-mono text-text-muted">
+                    {activeIncident.primary_asset} ({activeIncident.primary_asset_criticality})
+                  </span>
+                </div>
+                <h3 className="font-display text-xl md:text-2xl font-medium tracking-tight text-ink mt-2">
+                  {activeIncident.title}
+                </h3>
+              </div>
+
+              <button
+                onClick={() => onSelectIncident(activeIncident.id)}
+                className="px-4 py-2 bg-clay text-ink hover:bg-clay/90 font-display font-medium text-xs uppercase tracking-wider flex items-center gap-2 border border-clay transition-colors"
+              >
+                <span>Investigate Incident</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </button>
+            </div>
+
+            {/* Sequential Kill-Chain Pipeline */}
+            <div className="space-y-4">
+              <span className="text-[10px] font-mono uppercase tracking-wider text-text-muted font-bold block">
+                Sequential Attack Execution Pipeline:
+              </span>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                {activeIncident.attack_chain.map((step, idx) => (
+                  <div
+                    key={step.stage}
+                    className="p-5 bg-canvas border border-hairline flex flex-col justify-between space-y-3 hover:border-ink/40 transition-colors"
+                  >
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="w-5 h-5 bg-oat border border-hairline text-ink font-mono text-[10px] font-bold flex items-center justify-center">
+                          {idx + 1}
+                        </span>
+                        <span className="text-xs font-mono text-text-muted">
+                          {step.timestamp.slice(11, 19)}
+                        </span>
+                      </div>
+
+                      <h4 className="font-display text-sm font-semibold text-ink">
+                        {step.stage}
+                      </h4>
+                      <div className="text-xs font-mono text-clay-deep bg-manilla/50 px-2 py-0.5 border border-hairline inline-block">
+                        {step.technique_id} &bull; {step.technique_name}
+                      </div>
+                    </div>
+
+                    <div className="font-serif text-xs text-ink/80 border-t border-hairline pt-2.5 leading-relaxed">
+                      {step.evidence}
+                    </div>
+
+                    <div className="pt-2 border-t border-hairline flex items-center justify-between text-xs font-mono text-text-muted">
+                      <span>Source: {step.source}</span>
+                      <span className="text-ink font-semibold">
+                        {Math.round(step.confidence * 100)}% Conf
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
+
+      <DirectoryFooter />
     </div>
   );
 };

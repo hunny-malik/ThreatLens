@@ -59,7 +59,6 @@ export const SimulationModal: React.FC<SimulationModalProps> = ({
 
     const targetVolume = streamSource === 'CURRENT' ? 3000 : volume;
 
-    // Visual step progression and streaming counter animation
     const stepDuration = 140;
     const tickerInterval = setInterval(() => {
       setStreamProgressCount((prev) => {
@@ -91,57 +90,57 @@ export const SimulationModal: React.FC<SimulationModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-      <div className="bg-charcoal-900 border border-slate-700 w-full max-w-3xl rounded-lg shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-ink/60 backdrop-blur-sm p-4">
+      <div className="bg-surface border border-hairline w-full max-w-3xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
         {/* Header */}
-        <div className="px-5 py-4 border-b border-slate-800 flex items-center justify-between bg-charcoal-950">
+        <div className="px-6 py-4 border-b border-hairline flex items-center justify-between bg-canvas">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded bg-cyan-950/80 border border-cyan-800 flex items-center justify-center text-cyan-400">
+            <div className="w-8 h-8 bg-oat border border-hairline flex items-center justify-center text-ink">
               <Play className="w-4 h-4 fill-current" />
             </div>
             <div>
-              <h2 className="text-sm font-semibold text-slate-100 uppercase tracking-wide font-mono">
+              <h2 className="font-display text-sm font-semibold uppercase tracking-wider text-ink">
                 ThreatLens Real-Time Stream &amp; Pipeline Engine
               </h2>
-              <p className="text-xs text-slate-400 mt-0.5">
-                Simulate real-time stream ingestion on the active uploaded dataset or generate test storms
+              <p className="text-xs text-text-muted mt-0.5 font-sans">
+                Simulate real-time stream ingestion on the active uploaded dataset or generate test storm telemetry
               </p>
             </div>
           </div>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-200">
+          <button onClick={onClose} className="text-text-muted hover:text-ink">
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Configuration Bar */}
-        <div className="p-4 bg-slate-900/60 border-b border-slate-800 flex items-center justify-between flex-wrap gap-4">
+        <div className="px-6 py-3.5 bg-surface border-b border-hairline flex items-center justify-between flex-wrap gap-4">
           <div className="flex items-center gap-3 flex-wrap">
-            <span className="text-xs font-mono uppercase text-slate-400">Stream Source:</span>
+            <span className="text-xs font-mono uppercase tracking-wider text-text-muted">Source:</span>
             <div className="flex gap-2">
               <button
                 disabled={isRunning}
                 onClick={() => setStreamSource('CURRENT')}
-                className={`px-3 py-1 rounded text-xs font-mono border transition-colors flex items-center gap-1.5 ${
+                className={`px-3 py-1 text-xs font-mono uppercase tracking-wider border transition-colors flex items-center gap-1.5 ${
                   streamSource === 'CURRENT'
-                    ? 'bg-cyan-950 text-cyan-300 border-cyan-700 font-semibold'
-                    : 'bg-slate-800 text-slate-400 border-slate-700 hover:text-slate-200'
+                    ? 'bg-clay text-ink font-semibold border-clay'
+                    : 'bg-canvas text-ink/70 border-hairline hover:bg-oat/50'
                 }`}
               >
-                <Radio className="w-3 h-3 text-cyan-400" />
-                <span>ACTIVE DATASET (3,000 LOGS)</span>
+                <Radio className="w-3 h-3 text-ink" />
+                <span>Active Dataset</span>
               </button>
 
               <button
                 disabled={isRunning}
                 onClick={() => setStreamSource('SYNTHETIC')}
-                className={`px-3 py-1 rounded text-xs font-mono border transition-colors flex items-center gap-1.5 ${
+                className={`px-3 py-1 text-xs font-mono uppercase tracking-wider border transition-colors flex items-center gap-1.5 ${
                   streamSource === 'SYNTHETIC'
-                    ? 'bg-cyan-950 text-cyan-300 border-cyan-700 font-semibold'
-                    : 'bg-slate-800 text-slate-400 border-slate-700 hover:text-slate-200'
+                    ? 'bg-clay text-ink font-semibold border-clay'
+                    : 'bg-canvas text-ink/70 border-hairline hover:bg-oat/50'
                 }`}
               >
-                <Layers className="w-3 h-3 text-cyan-400" />
-                <span>SYNTHETIC STORM</span>
+                <Layers className="w-3 h-3 text-ink" />
+                <span>Synthetic Storm</span>
               </button>
             </div>
 
@@ -152,10 +151,10 @@ export const SimulationModal: React.FC<SimulationModalProps> = ({
                     key={v}
                     disabled={isRunning}
                     onClick={() => setVolume(v)}
-                    className={`px-2 py-0.5 rounded text-[11px] font-mono border transition-colors ${
+                    className={`px-2.5 py-0.5 text-xs font-mono border transition-colors ${
                       volume === v
-                        ? 'bg-cyan-900 text-cyan-200 border-cyan-600 font-bold'
-                        : 'bg-slate-900 text-slate-400 border-slate-800 hover:text-slate-200'
+                        ? 'bg-oat text-ink border-hairline font-bold'
+                        : 'bg-canvas text-text-muted border-hairline hover:text-ink'
                     }`}
                   >
                     {v.toLocaleString()}
@@ -168,17 +167,17 @@ export const SimulationModal: React.FC<SimulationModalProps> = ({
           <button
             onClick={handleStartSimulation}
             disabled={isRunning}
-            className="flex items-center gap-2 px-4 py-2 rounded bg-cyan-600 hover:bg-cyan-500 disabled:opacity-50 text-slate-950 text-xs font-bold font-mono transition-colors shadow-lg shadow-cyan-950/50"
+            className="flex items-center gap-2 px-4 py-2 bg-clay text-ink hover:bg-clay/90 disabled:opacity-50 text-xs font-display font-medium uppercase tracking-wider border border-clay transition-colors"
           >
             {isRunning ? (
               <>
-                <Loader2 className="w-4 h-4 animate-spin" />
-                <span>STREAMING LOGS...</span>
+                <Loader2 className="w-4 h-4 animate-spin text-ink" />
+                <span>Streaming Logs...</span>
               </>
             ) : (
               <>
-                <Play className="w-4 h-4 fill-current" />
-                <span>START STREAM</span>
+                <Play className="w-4 h-4 fill-current text-ink" />
+                <span>Start Stream</span>
               </>
             )}
           </button>
@@ -186,57 +185,57 @@ export const SimulationModal: React.FC<SimulationModalProps> = ({
 
         {/* Live Streaming Progress Meter */}
         {isRunning && (
-          <div className="px-5 py-3 bg-slate-950 border-b border-slate-800 flex items-center justify-between text-xs font-mono">
-            <div className="flex items-center gap-2 text-cyan-400">
-              <Activity className="w-4 h-4 animate-pulse" />
+          <div className="px-6 py-3 bg-canvas border-b border-hairline flex items-center justify-between text-xs font-mono text-ink">
+            <div className="flex items-center gap-2">
+              <Activity className="w-4 h-4 text-clay-deep animate-pulse" />
               <span>Kafka Ingestion Stream:</span>
-              <strong className="text-slate-100 font-bold">
+              <strong className="font-bold">
                 {streamProgressCount.toLocaleString()} / {(streamSource === 'CURRENT' ? 3000 : volume).toLocaleString()} alerts
               </strong>
             </div>
-            <span className="text-[11px] text-slate-400">
-              Hashing across 8 Kafka partitions &bull; 1,640 eps
+            <span className="text-[11px] text-text-muted">
+              Hashing across 8 Kafka partitions &bull; ~1,640 eps
             </span>
           </div>
         )}
 
         {/* Simulation Execution Content */}
-        <div className="p-5 overflow-y-auto space-y-4 flex-1">
+        <div className="p-6 overflow-y-auto space-y-4 flex-1">
           {/* Summary Banner after completion */}
           {summary && (
-            <div className="p-4 rounded-lg bg-emerald-950/30 border border-emerald-800/80 space-y-3">
+            <div className="p-4 bg-sage/20 border border-sage space-y-3 text-ink">
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2 text-emerald-400 font-mono text-xs font-bold uppercase">
-                  <CheckCircle2 className="w-4 h-4" />
+                <div className="flex items-center gap-2 font-mono text-xs font-bold uppercase">
+                  <CheckCircle2 className="w-4 h-4 text-ink" />
                   <span>Pipeline Execution Complete &bull; Real-time Overview Updated</span>
                 </div>
-                <span className="text-xs font-mono text-emerald-300">
+                <span className="text-xs font-mono font-semibold">
                   {summary.mttt_reduction_pct}% FASTER TRIAGE
                 </span>
               </div>
 
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2 border-t border-emerald-900/60 text-xs font-mono">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2 border-t border-hairline text-xs font-mono">
                 <div>
-                  <span className="text-slate-400 block text-[10px]">INGESTED TELEMETRY</span>
-                  <span className="text-slate-100 font-bold">{summary.alerts_ingested.toLocaleString()} ALERTS</span>
+                  <span className="text-text-muted block text-[10px] uppercase">Ingested Telemetry</span>
+                  <span className="font-semibold text-ink">{summary.alerts_ingested.toLocaleString()} Alerts</span>
                 </div>
                 <div>
-                  <span className="text-slate-400 block text-[10px]">NOISE COLLAPSED</span>
-                  <span className="text-emerald-400 font-bold">
+                  <span className="text-text-muted block text-[10px] uppercase">Noise Collapsed</span>
+                  <span className="font-semibold text-ink">
                     {summary.collapsed_duplicates.toLocaleString()} ({summary.deduplication_ratio_pct}%)
                   </span>
                 </div>
                 <div>
-                  <span className="text-slate-400 block text-[10px]">INCIDENTS CREATED</span>
-                  <span className={`font-bold ${summary.incidents_created > 0 ? 'text-cyan-400' : 'text-emerald-400'}`}>
+                  <span className="text-text-muted block text-[10px] uppercase">Incidents Created</span>
+                  <span className="font-semibold text-ink">
                     {summary.incidents_created > 0
-                      ? `${summary.incidents_created} ACTIONABLE`
-                      : '0 (CLEAN BASELINE)'}
+                      ? `${summary.incidents_created} Actionable`
+                      : '0 (Clean Baseline)'}
                   </span>
                 </div>
                 <div>
-                  <span className="text-slate-400 block text-[10px]">ASSISTED MTTT</span>
-                  <span className="text-amber-400 font-bold">
+                  <span className="text-text-muted block text-[10px] uppercase">Assisted MTTT</span>
+                  <span className="font-semibold text-ink">
                     {summary.mttt_assisted_minutes} min (vs {summary.mttt_baseline_minutes}m)
                   </span>
                 </div>
@@ -246,7 +245,7 @@ export const SimulationModal: React.FC<SimulationModalProps> = ({
 
           {/* 15 Steps List */}
           <div className="space-y-2">
-            <h3 className="text-xs font-semibold text-slate-300 uppercase tracking-wider font-mono">
+            <h3 className="font-display text-xs font-semibold text-ink uppercase tracking-wider">
               Pipeline Execution Sequence (15 Stages)
             </h3>
 
@@ -258,41 +257,41 @@ export const SimulationModal: React.FC<SimulationModalProps> = ({
                 return (
                   <div
                     key={step.step}
-                    className={`p-2.5 rounded border transition-colors flex items-center justify-between text-xs font-mono ${
+                    className={`p-3 border transition-colors flex items-center justify-between text-xs font-mono ${
                       isStepActive
-                        ? 'bg-cyan-950/60 border-cyan-700 text-cyan-200'
+                        ? 'bg-oat/50 border-hairline text-ink'
                         : isStepDone
-                        ? 'bg-slate-900/40 border-slate-800 text-slate-300'
-                        : 'bg-slate-950/40 border-slate-900 text-slate-400'
+                        ? 'bg-surface border-hairline text-ink'
+                        : 'bg-canvas border-hairline text-text-muted'
                     }`}
                   >
                     <div className="flex items-center gap-3">
                       <div className="w-5 text-center">
                         {isStepDone ? (
-                          <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                          <CheckCircle2 className="w-4 h-4 text-ink" />
                         ) : isStepActive ? (
-                          <Loader2 className="w-4 h-4 text-cyan-400 animate-spin" />
+                          <Loader2 className="w-4 h-4 text-clay-deep animate-spin" />
                         ) : (
-                          <span className="text-slate-400 text-[11px]">{step.step}</span>
+                          <span className="text-text-muted text-[11px]">{step.step}</span>
                         )}
                       </div>
 
                       <div>
-                        <div className="font-semibold text-slate-200">{step.name}</div>
-                        <div className="text-[11px] text-slate-400 font-sans">{step.desc}</div>
+                        <div className="font-semibold text-ink">{step.name}</div>
+                        <div className="text-[11px] text-text-muted font-sans">{step.desc}</div>
                       </div>
                     </div>
 
                     <span
-                      className={`text-[10px] px-1.5 py-0.5 rounded font-mono ${
+                      className={`text-[10px] px-2 py-0.5 font-mono uppercase tracking-wider border ${
                         isStepDone
-                          ? 'bg-emerald-950 text-emerald-400 border border-emerald-800'
+                          ? 'bg-sage/40 text-ink border-sage font-medium'
                           : isStepActive
-                          ? 'bg-cyan-950 text-cyan-300 border border-cyan-800'
-                          : 'bg-slate-900 text-slate-400 border border-slate-800'
+                          ? 'bg-clay text-ink border-clay font-semibold'
+                          : 'bg-canvas text-text-muted border-hairline'
                       }`}
                     >
-                      {isStepDone ? 'COMPLETE' : isStepActive ? 'EXECUTING' : 'PENDING'}
+                      {isStepDone ? 'Complete' : isStepActive ? 'Executing' : 'Pending'}
                     </span>
                   </div>
                 );
@@ -302,11 +301,11 @@ export const SimulationModal: React.FC<SimulationModalProps> = ({
         </div>
 
         {/* Footer */}
-        <div className="px-5 py-3 border-t border-slate-800 bg-charcoal-950 flex justify-between items-center text-xs font-mono text-slate-400">
+        <div className="px-6 py-3.5 border-t border-hairline bg-canvas flex justify-between items-center text-xs font-mono text-text-muted">
           <span>Real-time WebSocket &bull; /ws/stream active &bull; Dynamic UI Sync</span>
           <button
             onClick={onClose}
-            className="px-3 py-1 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded transition-colors"
+            className="px-3 py-1 bg-surface hover:bg-oat/50 text-ink border border-hairline text-xs font-display"
           >
             Close
           </button>

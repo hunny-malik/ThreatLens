@@ -58,44 +58,44 @@ export const Sidebar: React.FC<SidebarProps> = ({
   ];
 
   return (
-    <aside className="w-60 bg-charcoal-950 border-r border-slate-800 flex flex-col justify-between shrink-0 select-none z-10">
+    <aside className="w-64 bg-surface border-r border-hairline flex flex-col justify-between shrink-0 select-none z-10 font-sans">
       <div>
         {/* Top Logo */}
-        <div className="h-14 px-4 flex items-center border-b border-slate-800">
+        <div className="h-16 px-5 flex items-center border-b border-hairline bg-surface">
           <BrandLogo size="md" />
         </div>
 
         {/* Section Heading */}
-        <div className="px-4 pt-4 pb-2 text-[10px] font-mono uppercase tracking-wider text-slate-400">
-          Security Operations
+        <div className="px-5 pt-5 pb-2 text-[11px] font-mono uppercase tracking-wider text-text-muted">
+          Operational Views
         </div>
 
         {/* Navigation items */}
-        <nav className="px-2 space-y-0.5">
+        <nav className="px-3 space-y-1">
           {navItems.map((item) => {
             const isActive = currentView === item.id;
             return (
               <button
                 key={item.id}
                 onClick={() => onSelectView(item.id)}
-                className={`w-full flex items-center justify-between px-3 py-2 rounded text-xs transition-colors font-medium ${
+                className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-lg text-xs transition-colors font-medium text-left ${
                   isActive
-                    ? 'bg-slate-800/90 text-cyan-400 border border-slate-700/80 shadow-sm'
-                    : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900'
+                    ? 'bg-oat text-ink font-semibold border border-hairline'
+                    : 'text-ink-soft hover:text-ink hover:bg-oat/50'
                 }`}
               >
-                <div className="flex items-center gap-2.5">
-                  <span className={isActive ? 'text-cyan-400' : 'text-slate-500'}>
+                <div className="flex items-center gap-3">
+                  <span className={isActive ? 'text-clay-deep' : 'text-text-muted'}>
                     {item.icon}
                   </span>
-                  <span>{item.label}</span>
+                  <span className="font-sans">{item.label}</span>
                 </div>
                 {item.badge !== undefined && item.badge > 0 && (
                   <span
-                    className={`font-mono text-[10px] px-1.5 py-0.2 rounded border ${
+                    className={`font-mono text-[10px] px-2 py-0.5 rounded-full border ${
                       isActive
-                        ? 'bg-red-950/80 text-red-400 border-red-800/80'
-                        : 'bg-slate-800 text-slate-300 border-slate-700'
+                        ? 'bg-clay text-ink font-bold border-[#c26547]'
+                        : 'bg-oat text-ink border-hairline'
                     }`}
                   >
                     {item.badge}
@@ -108,12 +108,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
       </div>
 
       {/* Footer Info */}
-      <div className="p-3 border-t border-slate-800/80 text-[11px] font-mono text-slate-400 bg-slate-900/40">
-        <div className="flex items-center justify-between text-slate-400 mb-1">
+      <div className="p-4 border-t border-hairline text-[11px] font-mono text-text-muted bg-canvas/60">
+        <div className="flex items-center justify-between text-text-muted mb-1.5">
           <span>PIPELINE ENGINE</span>
-          <span className="text-cyan-400">SPARK + KAFKA</span>
+          <span className="text-ink font-medium">SPARK + KAFKA</span>
         </div>
-        <div className="flex items-center justify-between text-slate-400">
+        <div className="flex items-center justify-between text-text-muted">
           <span>THREATLENS</span>
           <span>v2.4.0-PROD</span>
         </div>

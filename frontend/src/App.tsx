@@ -77,7 +77,7 @@ export const App: React.FC = () => {
   };
 
   return (
-    <div className="flex h-screen w-screen overflow-hidden bg-charcoal-900 text-slate-100">
+    <div className="flex h-screen w-screen overflow-hidden bg-canvas text-ink font-sans">
       {/* Fixed Sidebar */}
       <Sidebar
         currentView={currentView}
@@ -86,7 +86,7 @@ export const App: React.FC = () => {
       />
 
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
+      <div className="flex-1 flex flex-col min-w-0 overflow-hidden bg-canvas">
         <Header
           onOpenSearch={() => setSearchModalOpen(true)}
           onOpenSimulation={() => setSimulationModalOpen(true)}
@@ -95,7 +95,7 @@ export const App: React.FC = () => {
           onRoleChange={setCurrentRole}
         />
 
-        <main className="flex-1 overflow-y-auto">
+        <main className="flex-1 overflow-y-auto bg-canvas">
           {currentView === 'overview' && (
             <DashboardView
               data={dashboardData}
