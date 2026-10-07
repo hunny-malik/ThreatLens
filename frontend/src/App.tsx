@@ -14,7 +14,6 @@ import { BenchmarksView } from './components/benchmarks/BenchmarksView';
 import { AuditView } from './components/audit/AuditView';
 import { SettingsView } from './components/settings/SettingsView';
 import { GlobalSearchModal } from './components/common/GlobalSearchModal';
-import { SimulationModal } from './components/common/SimulationModal';
 import { DatasetManagerModal } from './components/datasets/DatasetManagerModal';
 import { api } from './services/api';
 import { DashboardKPIs, Incident } from './types';
@@ -30,7 +29,6 @@ export const App: React.FC = () => {
 
   // Modals
   const [searchModalOpen, setSearchModalOpen] = useState(false);
-  const [simulationModalOpen, setSimulationModalOpen] = useState(false);
   const [datasetModalOpen, setDatasetModalOpen] = useState(false);
 
   const refreshAllData = async () => {
@@ -89,7 +87,6 @@ export const App: React.FC = () => {
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden bg-canvas">
         <Header
           onOpenSearch={() => setSearchModalOpen(true)}
-          onOpenSimulation={() => setSimulationModalOpen(true)}
           onOpenDatasets={() => setDatasetModalOpen(true)}
           currentRole={currentRole}
           onRoleChange={setCurrentRole}
@@ -102,7 +99,7 @@ export const App: React.FC = () => {
               incidents={incidents}
               onSelectIncident={handleSelectIncident}
               onNavigateToIncidents={() => setCurrentView('incidents')}
-              onOpenSimulation={() => setSimulationModalOpen(true)}
+              onOpenDatasets={() => setDatasetModalOpen(true)}
             />
           )}
 
@@ -159,14 +156,6 @@ export const App: React.FC = () => {
         isOpen={searchModalOpen}
         onClose={() => setSearchModalOpen(false)}
         onSelectIncident={handleSelectIncident}
-      />
-
-      <SimulationModal
-        isOpen={simulationModalOpen}
-        onClose={() => setSimulationModalOpen(false)}
-        onSimulationCompleted={() => {
-          refreshAllData();
-        }}
       />
 
       <DatasetManagerModal

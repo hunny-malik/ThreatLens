@@ -23,7 +23,7 @@ interface DashboardViewProps {
   incidents: Incident[];
   onSelectIncident: (id: string) => void;
   onNavigateToIncidents: () => void;
-  onOpenSimulation: () => void;
+  onOpenDatasets: () => void;
 }
 
 export const DashboardView: React.FC<DashboardViewProps> = ({
@@ -31,7 +31,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
   incidents,
   onSelectIncident,
   onNavigateToIncidents,
-  onOpenSimulation,
+  onOpenDatasets,
 }) => {
   if (!data) {
     return (
@@ -96,10 +96,11 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
 
               <div className="flex items-center gap-3 pt-1">
                 <button
-                  onClick={onOpenSimulation}
+                  onClick={onOpenDatasets}
                   className="px-4 py-2.5 rounded-lg bg-clay hover:bg-[#cf6f4f] text-ink font-sans text-xs font-semibold flex items-center gap-2 transition-all shadow-xs"
                 >
-                  <span>Simulate Shift Stream</span>
+                  <Database className="w-3.5 h-3.5 fill-ink" />
+                  <span>Open Dataset Hub &amp; Ingest</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </button>
                 <button

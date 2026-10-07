@@ -4,7 +4,6 @@ import { api } from '../../services/api';
 
 interface HeaderProps {
   onOpenSearch: () => void;
-  onOpenSimulation: () => void;
   onOpenDatasets: () => void;
   currentRole: string;
   onRoleChange: (role: string) => void;
@@ -13,7 +12,6 @@ interface HeaderProps {
 
 export const Header: React.FC<HeaderProps> = ({
   onOpenSearch,
-  onOpenSimulation,
   onOpenDatasets,
   currentRole,
   onRoleChange,
@@ -60,24 +58,14 @@ export const Header: React.FC<HeaderProps> = ({
 
       {/* Right Controls */}
       <div className="flex items-center gap-3">
-        {/* Datasets & Upload Button */}
+        {/* Datasets & Ingestion Hub Button (The Signature Clay Action) */}
         <button
           onClick={onOpenDatasets}
-          className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-surface hover:bg-oat text-ink border border-hairline text-xs font-sans font-medium transition-colors shadow-xs"
-          title="Load 6 operational datasets or 100K Big Data benchmark"
-        >
-          <Database className="w-3.5 h-3.5 text-clay" />
-          <span>Datasets &amp; Upload</span>
-        </button>
-
-        {/* Run SOC Simulation Trigger Button (The Signature Clay Action) */}
-        <button
-          onClick={onOpenSimulation}
           className="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-clay hover:bg-[#cf6f4f] text-ink font-sans text-xs font-semibold transition-all shadow-xs"
-          title="Run full 15-stage shift correlation simulation"
+          title="Manage, Ingest & Correlate Datasets (3,000 to 100,000+ Logs)"
         >
-          <Play className="w-3.5 h-3.5 fill-ink" />
-          <span>Simulate Stream</span>
+          <Database className="w-3.5 h-3.5 fill-ink" />
+          <span>Dataset Hub &amp; Ingest</span>
         </button>
 
         {/* Pipeline Stream Status */}
